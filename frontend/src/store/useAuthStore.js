@@ -5,6 +5,8 @@ import { toast } from "react-hot-toast";
 export const useAuthStore = create((set) => ({
   authUser: null,
   isCheckingAuth: true,
+  isLoading: false,
+  isUpdatingProfile: false,
 
   checkAuth: async () => {
     try {
@@ -48,4 +50,17 @@ export const useAuthStore = create((set) => ({
 
     }
   },
+
+  updateProfile: async (formData) => {
+    set({ isUpdatingProfile: true });
+    try {
+      const res = await axiosInstance.put("/auth/update-profile", formData);
+      set({authUser: res.data});
+      toast.success("Profile updated!");
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Profile update failed");
+    } finally {
+      set({ isUpdatingProfile: false });
+    }
+  }  
 }));
