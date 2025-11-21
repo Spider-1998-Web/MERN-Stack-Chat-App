@@ -9,15 +9,16 @@ import ProfilePage from './pages/PorfilePage.jsx'
 
 import { Loader } from "lucide-react"
 import { useAuthStore } from './store/useAuthStore.js'
+import {useThemeStore} from "./store/useThemeStore.js";
 import { Toaster } from 'react-hot-toast'
 const App = () => {
   const { checkAuth, authUser, isCheckingAuth } = useAuthStore();
+  const { theme, } = useThemeStore();
 
   useEffect(() => {
     checkAuth();
   }, [checkAuth]);
 
-  console.log(authUser);
 
   if (isCheckingAuth && !authUser) {
     return <div className="flex items-center justify-center h-screen">
@@ -26,7 +27,7 @@ const App = () => {
   }
 
   return (
-    <div className="">
+    <div data-theme={theme}>
       <NavBar />
       <Routes>
         <Route path="/" element={authUser ? <HomePage /> : <Navigate to={"/login"} />} />
